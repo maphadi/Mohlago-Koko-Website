@@ -19,6 +19,9 @@ nav a {
     color: #fff;
     margin: 10px;
 }
+a:hover{
+    color: lightgreen;
+}
 .container {
     max-width: 960px;
     margin: 20px auto;
