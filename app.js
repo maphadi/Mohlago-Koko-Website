@@ -49,6 +49,9 @@ function showSlider(type){
 }
 
 
+
+
+
 // ------------------------------Counter belt ---------------------------//
 
 // const counters = document.querySelectorAll(".counters span");

@@ -222,7 +222,41 @@
         </div>
     </section>
 
-        <script>
+    <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const modalOverlay = document.getElementById('promoModalOverlay');
+        const closeButton = document.getElementById('closePromoModal');
+        const promoButton = document.getElementById('promoModalButton');
+        const sessionKey = 'promoModalShown';
+
+        const showModal = () => {
+            modalOverlay.classList.add('active');
+        };
+
+        const hideModal = () => {
+            modalOverlay.classList.remove('active');
+            sessionStorage.setItem(sessionKey, 'true');
+        };
+
+        // Show the modal only if it hasn't been shown in this session
+        if (!sessionStorage.getItem(sessionKey)) {
+            // Delay showing the modal slightly so the page can load
+            setTimeout(showModal, 1500);
+        }
+
+        // Event listeners to close the modal
+        closeButton.addEventListener('click', hideModal);
+        promoButton.addEventListener('click', hideModal);
+        modalOverlay.addEventListener('click', (event) => {
+            // Only close if the overlay itself is clicked, not the modal content
+            if (event.target === modalOverlay) {
+                hideModal();
+            }
+        });
+    });
+
+
     document.addEventListener("DOMContentLoaded", () => {
         const statsSection = document.querySelector('#stats');
 
@@ -275,6 +309,20 @@
     });
     </script>
 
+    <!-- Pop Up box / promo -->
+
+    <div class="promo-modal-overlay" id="promoModalOverlay">
+    <div class="promo-modal">
+        <span class="close-button" id="closePromoModal">&times;</span>
+        <img src="images/Alu1.jpg" 
+             alt="Modern aluminum window frames">
+        <h2>Big News!</h2>
+        <p>We've expanded our services and now offer high-quality <strong>aluminum gates, doors, and windows!</strong></p>
+        <a href="#services" class="promo-button" id="promoModalButton">Explore Our Services</a>
+    </div>
+</div>
+
+    <!-- Pop up Box / promo-->
 
     <!---------------------------------- SERVICES ----------------------------------------->
     <section id="services">
