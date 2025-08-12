@@ -188,28 +188,94 @@
     </div>
     </section>
 
-    <div class="counters">
-        <div>
-            <div class="counter">
-                <h1>R<span data-count="0"></span>.00</h1>
-                <h3>Quotation Fee</h3>
-            </div>
-            <div class="counter">
-                <!-- unlimited -->
-                <h1><span data-count="8">0</span>+</h1> 
-                <h3>Material Options</h3>
-            </div>
-            <div class="counter">
-                <h1><span data-count="98">0</span>%</h1>
-                <h3>On-Time Delivery</h3>
-            </div>
-            <div class="counter">
-                <h1><span data-count="3">0</span></h1>
-                <h3>Municipalities Served</h3>
+    <section id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <!-- Stat 1: Quotation Fee -->
+                <div class="stat-item">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h2 class="counter-number">R<span data-count="0">0</span>.00</h2>
+                    <p>Quotation Fee</p>
+                </div>
 
+                <!-- Stat 2: Material Options -->
+                <div class="stat-item">
+                    <i class="fas fa-layer-group"></i>
+                    <h2 class="counter-number"><span data-count="8">0</span>+</h2>
+                    <p>Material Options</p>
+                </div>
+
+                <!-- Stat 3: On-Time Delivery -->
+                <div class="stat-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h2 class="counter-number"><span data-count="98">0</span>%</h2>
+                    <p>On-Time Delivery</p>
+                </div>
+
+                <!-- Stat 4: Municipalities Served -->
+                <div class="stat-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h2 class="counter-number"><span data-count="3">0</span>+</h2>
+                    <p>Municipalities Served</p>
+                </div>
             </div>
-        </div>  
-    </div>
+        </div>
+    </section>
+
+        <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const statsSection = document.querySelector('#stats');
+
+        // Options for the Intersection Observer
+        const observerOptions = {
+            root: null, // relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.4 // Trigger when 40% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // If the stats section is intersecting the viewport
+                if (entry.isIntersecting) {
+                    const counters = document.querySelectorAll('[data-count]');
+                    
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-count');
+                        // Reset counter to 0 to re-animate if it scrolls out and back in
+                        counter.innerText = '0'; 
+
+                        const speed = 200; // Lower is faster
+                        const duration = 2000; // Total animation time in ms
+                        const increment = target / (duration / (1000 / 60)); // Calculate increment per frame for smooth animation
+
+                        const updateCount = () => {
+                            const current = +counter.innerText;
+                            
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current + increment);
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                counter.innerText = target; // Ensure it ends on the exact target number
+                            }
+                        };
+                        
+                        requestAnimationFrame(updateCount);
+                    });
+                    
+                    // Unobserve after the animation has been triggered to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Start observing the stats section
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    });
+    </script>
+
+
     <!---------------------------------- SERVICES ----------------------------------------->
     <section id="services">
         <div class="container">
