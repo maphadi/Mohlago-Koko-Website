@@ -48,44 +48,89 @@ function showSlider(type){
     }, timeAutoNext)
 }
 
+// 
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const modalOverlay = document.getElementById('promoModalOverlay');
+        const closeButton = document.getElementById('closePromoModal');
+        const promoButton = document.getElementById('promoModalButton');
+        const sessionKey = 'promoModalShown';
+
+        const showModal = () => {
+            modalOverlay.classList.add('active');
+        };
+
+        const hideModal = () => {
+            modalOverlay.classList.remove('active');
+            sessionStorage.setItem(sessionKey, 'true');
+        };
+
+        // Show the modal only if it hasn't been shown in this session
+        if (!sessionStorage.getItem(sessionKey)) {
+            // Delay showing the modal slightly so the page can load
+            setTimeout(showModal, 1500);
+        }
+
+        // Event listeners to close the modal
+        closeButton.addEventListener('click', hideModal);
+        promoButton.addEventListener('click', hideModal);
+        modalOverlay.addEventListener('click', (event) => {
+            // Only close if the overlay itself is clicked, not the modal content
+            if (event.target === modalOverlay) {
+                hideModal();
+            }
+        });
+    });
 
 
+    document.addEventListener("DOMContentLoaded", () => {
+        const statsSection = document.querySelector('#stats');
 
+        // Options for the Intersection Observer
+        const observerOptions = {
+            root: null, // relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.4 // Trigger when 40% of the element is visible
+        };
 
-// ------------------------------Counter belt ---------------------------//
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // If the stats section is intersecting the viewport
+                if (entry.isIntersecting) {
+                    const counters = document.querySelectorAll('[data-count]');
+                    
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-count');
+                        // Reset counter to 0 to re-animate if it scrolls out and back in
+                        counter.innerText = '0'; 
 
-// const counters = document.querySelectorAll(".counters span");
-// const container = document.querySelector(".counters");
+                        const speed = 200; // Lower is faster
+                        const duration = 2000; // Total animation time in ms
+                        const increment = target / (duration / (1000 / 60)); // Calculate increment per frame for smooth animation
 
-// let activated = false;
+                        const updateCount = () => {
+                            const current = +counter.innerText;
+                            
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current + increment);
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                counter.innerText = target; // Ensure it ends on the exact target number
+                            }
+                        };
+                        
+                        requestAnimationFrame(updateCount);
+                    });
+                    
+                    // Unobserve after the animation has been triggered to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-// window.addEventListener("scroll", () => {
-//     if(
-//         pageYOffset > container.offsetTop - container.offsetHeight - 200 && activated == false
-//     ){
-//         counters.forEach(counter => { 
-//             counter.innerText = 0;
-//             let count = 0;
-//             function updateCount(){
-//                 const target = parseInt(counter.dataset.count);
-//                 if(count < target){
-//                     count++;
-//                     counter.innerText = count;
-//                     setTimeout(updateCount, 10);
-//                 }else{
-//                     counter.innerText = target;
-//                 }
-//             }
-//             updateCount();
-//             activated = true;
-//         });
-//     } else if(
-//         pageYOffset < container.offsetTop - container.offsetHeight - 500 || pageYOffset === 0 && activated === true
-//     ) {
-//         counters.forEach(counter => {
-//             counter.innerText = 0;
-//         });
-
-//         activated = false;
-//     }
-// });
+        // Start observing the stats section
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    });
+// 

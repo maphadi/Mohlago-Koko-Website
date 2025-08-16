@@ -14,134 +14,202 @@ body {
     
 }
 
+/*  */
+
+/* ========== IMPROVED HEADER CSS ========== */
+
+/* General Header Styling */
 .header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 5px 50px;
-    /* background: rgb(162, 162, 162); */
+    padding: 15px 5%; /* Use percentage for better responsiveness */
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-
+    transition: background-color 0.4s ease, padding 0.4s ease; /* Smooth transition for scroll effect */
 }
 
-.logo {
+/* Scrolled state for the header */
+.header.scrolled {
+    background-color: rgba(15, 23, 42, 0.85); /* A professional dark slate color */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 10px 5%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-    font-size: 32px;
-    color: #7ed957;
+/* Logo Styling */
+.logo {
     text-decoration: none;
+}
+
+.logo div { /* New container for better alignment */
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 28px;
+    color: #7ed957;
     font-weight: 700;
 }
 
-.subtext {
-    display: block;
-    font-size: 16px;
-    color: #7ed957;
-    margin-left: 75px;
+.logo .subtext {
+    font-size: 14px;
+    color: #ffffff; /* White looks cleaner against the dark scroll background */
+    font-weight: 400;
+    letter-spacing: 1px;
 }
-.links-container{
-    height: 100%;
-    width: 100%;
+
+/* Desktop Navigation Links */
+.navbar .links-container-desktop {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 10px; /* Use gap for spacing */
 }
 
 .navbar a {
     position: relative;
-    font-size: 18px;
-    color: white;
+    font-size: 17px;
+    color: #ffffff;
     font-weight: 500;
     text-decoration: none;
-    margin-left: 40px;
-    
+    padding: 5px 10px;
 }
 
-.navbar a::before {
+/* Underline hover effect */
+.navbar a:not(.cta-button)::before {
     content: '';
     position: absolute;
-    top: 100%;
+    bottom: -2px; /* Positioned slightly below the text */
     left: 0;
     width: 0;
     height: 2px;
-    background: rgb(212, 181, 4);
-    transition: 1.0s;
+    background: #d4b504; /* The yellow from your original design */
+    transition: width 0.4s ease;
 }
 
-.navbar a:hover::before {
+.navbar a:not(.cta-button):hover::before {
     width: 100%;
 }
 
-nav svg{
-    fill: var(--text-color);
+/* Call-to-Action Button Styling */
+.cta-button {
+    background-color: #7ed957; /* Your primary green */
+    color: #1a1a1a; /* Dark text for contrast */
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-left: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-#sidebar-active{
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 217, 87, 0.4);
+}
+
+/* Hide checkbox and mobile elements by default */
+#sidebar-active {
     display: none;
 }
-.open-sidebar-button, .close-sidebar-button{
+.open-sidebar-button, .links-container-mobile {
     display: none;
 }
 
-@media(max-width:420px){
-    .logo{
-        font-size: 20px;
-        color: #7ed957;
-        text-decoration: none;
-        font-weight: 700;
+
+/* ========== CORRECTED MOBILE & TABLET STYLES ========== */
+
+@media (max-width: 900px) {
+    /* Hide desktop links and show hamburger icon */
+    .navbar .links-container-desktop { /* THIS IS THE KEY FIX - making the selector more specific */
+        display: none;
     }
-    .subtext {
+    
+    .open-sidebar-button {
         display: block;
-        font-size: 16px;
-        color: #7ed957;
-        margin-left: 50px;
+        cursor: pointer;
     }
-}
 
-
-@media(max-width: 900px){
-    .links-container{
+    /* Mobile Sidebar Menu Styling */
+    .links-container-mobile {
+        display: flex;
         flex-direction: column;
         align-items: flex-start;
         position: fixed;
         top: 0;
-        right: -100%;
-        z-index: 10;
+        right: -100%; /* Hidden off-screen */
+        z-index: 100;
         width: 300px;
-        background-color: var(--color-1);
-        transition: .75s ease-out;
-        background-color: #7ed957;
+        height: 100%;
+        background-color: #1f2937; /* A cleaner, dark background */
+        box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        padding-top: 60px; /* Space for the close button */
     }
-    nav a{
-        box-sizing: border-box;
-        height: auto;
-        width: 100%;
-        padding: 20px 30px;
-        justify-content: flex-start;
-    }
-    .open-sidebar-button, .close-sidebar-button{
-        padding: 20px;
-        display: block;
-    }
-    #sidebar-active:checked ~ .links-container{
-        /* display: flex; */
+
+    /* When checkbox is checked, slide the menu in */
+    #sidebar-active:checked ~ .links-container-mobile {
         right: 0;
     }
-    #sidebar-active:checked ~ #overlay{
+
+    .links-container-mobile a {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 20px 30px;
+        font-size: 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .links-container-mobile .cta-button {
+        margin: 20px auto; /* Center the button */
+        width: calc(100% - 60px);
+        text-align: center;
+    }
+
+    .close-sidebar-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+    }
+
+    /* Overlay for dimming the background */
+    .overlay {
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
         position: fixed;
         top: 0;
-        left:0 ;
-        z-index: 9;
+        left: 0;
+        z-index: 99;
+        background-color: rgba(0, 0, 0, 0.6);
+        transition: opacity 0.5s ease;
+        opacity: 0;
+        visibility: hidden;
     }
-     
+    
+    #sidebar-active:checked ~ .overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Adjust logo size for smaller screens */
+    .logo div {
+        font-size: 24px;
+    }
+    
+    .logo .subtext {
+        font-size: 12px;
+    }
 }
 
+/*  */
+
+
 /* carousel */
+
+
 .carousel{
     height: 100vh;
     margin-top: -50px;
@@ -715,186 +783,150 @@ nav svg{
 
 /* ------------------------------------------------------ */
 
-footer{
-    /* position: fixed; */
-    bottom: 0;
+/* ========== IMPROVED FOOTER CSS ========== */
 
-}
-.footer-distributed {
-    background-color: #7ed957;
-    box-sizing: border-box;
-    widows: 100%;
-    text-align: left;
-    font: bold 16px sans-serif;
-    padding: 50px 50px 60px 50px;
-    margin-top: 80px;
+.site-footer {
+    background-color: #1f2937; /* A professional dark slate/charcoal color */
+    color: #e5e7eb; /* A soft off-white for text */
+    padding: 60px 5% 20px 5%;
+    font-family: sans-serif; /* Ensure a consistent font */
 }
 
-.footer-distributed .footer-left, .footer-distributed .footer-center, .footer-distributed .footer-right{
-    display: inline-block;
-    vertical-align: top;
-}
-.footer-distributed .footer-left{
-    width: 30%;
-}
-
-.footer-distributed h3{
-    color: white;
-    /* font: normal 36px 'cookie' , cursive; */
-    margin: 0;
+/* Main flex container for the columns */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px; /* Modern way to add space between columns */
+    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+    margin-bottom: 40px;
 }
 
-.footer-distributed h3 span{
-    color: rgb(212, 181, 4);
-}
-.footer-distributed .footer-links{
-    color:#eee;
-    margin: 20px 0 12px;
+.footer-column {
+    flex: 1; /* Allows columns to grow and shrink as needed */
+    min-width: 280px; /* Prevents columns from getting too squished */
 }
 
-.footer-distributed .footer-links a{
-    display: inline-block;
-    line-height: 1.8;
-    text-decoration: none;
+/* Column 1: Left */
+.footer-left h3 {
+    color: #ffffff;
+    font-size: 32px;
+    margin: 0 0 20px 0;
+    font-weight: 700;
+}
+.footer-left h3 span {
+    color: #7ed957; /* Your primary green color */
+}
+.footer-links a {
     color: inherit;
+    text-decoration: none;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+.footer-links a:hover {
+    color: #7ed957;
 }
 
-.footer-distributed .footer-company-name{
-    color:white;
-    font-size: 14px;
-    font-weight: noraml;
-    margin: 0;
+/* Social Media Icons */
+.footer-icons {
+    margin-top: 30px;
 }
-
-.footer-distributed .footer-center{
-    width: 35%;
-}
-
-.footer-distributed .footer-center i{
-    background-color: #59bb2f;
-    color: white;
-    font-size: 25px;
-    width: 38px;
-    height: 38px;
+.footer-icons a {
+    display: inline-flex; /* Use flex for perfect centering */
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
-    text-align: center;
-    line-height: 42px;
-    margin: 10px 15px;
-    vertical-align: middle;
+    background-color: #374151; /* A slightly lighter grey */
+    color: #ffffff;
+    font-size: 18px;
+    text-decoration: none;
+    margin-right: 8px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
-.footer-distributed .footer-center i.fa-envelope{
-    font-size: 17px;
-    line-height: 38px;
+.footer-icons a:hover {
+    background-color: #7ed957;
+    transform: translateY(-3px); /* Add a nice lift effect */
 }
 
-.footer-distributed .footer-center p{
-    display: inline-block;
-    color: whitesmoke;
-    vertical-align: middle;
+/* Columns 2 & 3: Center & Right */
+.footer-center h4, .footer-right h4 {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.contact-item i {
+    color: #7ed957;
+    font-size: 20px;
+    margin-right: 15px;
+    width: 25px; /* Fixed width for alignment */
+    text-align: center;
+}
+.contact-item p {
     margin: 0;
+    line-height: 1.6;
 }
-.footer-distributed .footer-center p span{
+.contact-item p span {
     display: block;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 2px;
+    font-weight: 600;
 }
-.footer-distributed .footer-center p a{
-    color:whitesmoke;
+.contact-item a {
+    color: inherit;
     text-decoration: none;
 }
-
-.footer-distributed .footer-right{
-    width: 30%;
+.footer-company-about {
+    line-height: 1.8;
+    font-size: 15px;
 }
 
-.footer-distributed .footer-company-about{
-    line-height: 20px;
-    color: aliceblue;
-    font-size: 13px;
-    font-weight: normal;
-    margin: 0;
+/* Bottom Bar: Copyright & Credit */
+.footer-bottom {
+    border-top: 1px solid #374151;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allows items to stack on small screens */
+    gap: 15px;
+    font-size: 14px;
+    color: #9ca3af; /* A muted grey for less important text */
+}
+.footer-developer-credit a {
+    color: inherit;
+    text-decoration: none;
+}
+.footer-developer-credit a:hover {
+    color: #ffffff;
 }
 
-.footer-distributed .footer-company-about span{
-    display: block;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-.footer-distributed .footer-icons{
-    margin-top: 25px;
-}
-
-.footer-distributed .footer-icons a{
-    display: inline-block;
-    height: 35px;
-    width: 35px;
-    cursor: pointer;
-    background-color: grey;
-    border-radius: 2px;
-    font-size: 20px;
-    color: white;
-    text-align: center;
-    line-height: 35px;
-    margin-right: 3px;
-    margin-bottom: 5px;
-}
-
-.footer-distributed .footer-icons a:hover{
-    background-color: gold;
-}
-
-.footer-links a:hover{
-    color: gold;
-}
-
-@media (max-width: 800px) {
-    .footer-distributed {
-        display: flex;
-        flex-direction: column; /* Stack items vertically */
-        align-items: center; /* Center items horizontally */
-        position: relative; /* Ensure proper flow */
-        padding-bottom: 60px; /* Create space for absolute positioned content */
-    }
-
-    .footer-distributed .footer-center,
-    .footer-distributed .footer-right {
-        display: block;
-        width: 100%;
-        margin-top: 20px;
-        margin-bottom: 40px;
+/* ========== MOBILE & TABLET STYLES ========== */
+@media (max-width: 880px) {
+    .footer-container {
+        flex-direction: column; /* Stack columns vertically */
         text-align: center;
     }
-
-    .footer-distributed .footer-center i {
-        margin-left: 0;
+    .footer-column {
+        min-width: 100%; /* Make each column take full width */
+        margin-bottom: 30px;
     }
-
-    .footer-distributed .footer-company-name {
-        color: black;
+    .footer-links, .footer-icons {
+        justify-content: center;
+    }
+    .contact-item {
+        justify-content: center; /* Center contact items */
+    }
+    .footer-bottom {
+        flex-direction: column; /* Stack copyright and credit */
         text-align: center;
-        position: absolute;
-        bottom: 10px; /* Position at the bottom of the container */
-        left: 50%;
-        transform: translateX(-50%); /* Center horizontally */
-    }
-
-    .footer-distributed .footer-links {
-        position: relative; /* Keep it in the document flow */
-        margin-bottom: 20px;
-        text-align: center;
-    }
-    .footer-distributed .footer-left h3 {
-        /* font-size: 18px; Adjust font size for smaller screens */
-        /* font-weight: bold; */
-        /* margin: 0; Remove default margins */
-        line-height: 1.2; /* Ensure proper line spacing */
-        white-space: nowrap; 
-        /* text-align: left; */
     }
 }
+
 /* -----------------------whatsapp-------------------------------- */
 
 .whatsapp{
