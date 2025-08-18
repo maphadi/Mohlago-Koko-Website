@@ -42,10 +42,10 @@
     width: 350px;
     overflow: hidden;
     /* border: 15px solid white; */
-    border-radius: 20px;
+    border-radius: 5px;
     /* box-shadow: 0 3px 5px black; */
     background: rgb(212, 181, 4);
-    box-shadow: 15px 15px 30px #7ed957, -15px -15px 30px #7ed957;
+    /* box-shadow: 15px 15px 30px #7ed957, -15px -15px 30px #7ed957; */
     margin: 20px;
 }
 
@@ -125,7 +125,7 @@ color: aliceblue;
     margin-left: 75px;
 }
 
-/*  */
+/* -----------------------------footer ------------------ */
 .site-footer {
     background-color: #1f2937; /* A professional dark slate/charcoal color */
     color: #e5e7eb; /* A soft off-white for text */
